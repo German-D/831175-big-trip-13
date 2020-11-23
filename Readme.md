@@ -1,7 +1,7 @@
 # Проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Герман Дольников](https://up.htmlacademy.ru/ecmascript/13/user/831175).
-* Наставник: `Неизвестно`.
+* Наставник: [Магомед Кандаев](https://htmlacademy.ru/profile/magomedkandaev).
 
 ---
 
