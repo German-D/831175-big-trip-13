@@ -1,1 +1,7 @@
 webpack.config.js
+
+node_modules/
+
+# Собранные файлы
+public/bundle.js
+public/bundle.js.map
