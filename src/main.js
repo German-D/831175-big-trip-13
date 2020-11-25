@@ -13,7 +13,7 @@ const render = (container, template, place) => {
 };
 
 const tripMain = document.querySelector(`.trip-main`);
-render(tripMain, createEventInfoTemplate(), `beforeend`);
+render(tripMain, createEventInfoTemplate(), `afterbegin`);
 
 const tripControls = document.querySelector(`.trip-controls`);
 render(tripControls, createMenuTemplate(), `beforeend`);
