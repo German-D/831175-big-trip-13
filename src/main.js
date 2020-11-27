@@ -8,7 +8,7 @@ import {creatEventPointTemplate} from "./view/event-point.js";
 
 const POINT_COUNT = 3;
 
-const render = (container, template, place = 'beforeend') => {
+const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
