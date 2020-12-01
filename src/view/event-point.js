@@ -1,11 +1,26 @@
-export const creatEventPointTemplate = () => {
+export const creatEventPointTemplate = (point) => {
+  const {type, destination, offers, cost, date} = point;
+
+  const offersArray = [];
+  offers.forEach(function (item) {
+    const {offersCost, offersName, offersType} = item;
+    offersArray.push(`<li class="event__offer">
+                    <span class="event__offer-title">${offersType} ${offersName}</span>
+                        &plus;&euro;&nbsp;
+                    <span class="event__offer-price">${offersCost}</span>
+                     </li>`);
+  });
+
+  const offersString = offersArray.join(``);
+
+
   return `<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-19">MAR 19</time>
+                <time class="event__date" datetime="2019-03-19">${date}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/sightseeing.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">Sightseeing Chamonix</h3>
+                <h3 class="event__title">${type} ${destination}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="2019-03-19T11:20">14:20</time>
@@ -15,20 +30,11 @@ export const creatEventPointTemplate = () => {
                   <p class="event__duration">1H 20M</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;<span class="event__price-value">50</span>
+                  &euro;&nbsp;<span class="event__price-value">${cost}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  <li class="event__offer">
-                    <span class="event__offer-title">Book tickets</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">40</span>
-                  </li>
-                  <li class="event__offer">
-                    <span class="event__offer-title">Lunch in city</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">30</span>
-                  </li>
+                 ${offersString}
                 </ul>
                 <button class="event__favorite-btn" type="button">
                   <span class="visually-hidden">Add to favorite</span>
