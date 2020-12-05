@@ -1,20 +1,23 @@
 import dayjs from "dayjs";
 import {getRandomInteger} from "../utils.js";
+import {shuffle} from "../utils.js";
 
-const MAX_LENGTH_DESCRIPTION = 5;
 const MAX_OFFERS_QUATITY = 5;
 const MAX_PHOTOS_QUATITY = 6;
 const MAX_COST = 100;
 
 const generateDescription = () => {
-  const descriptionNote = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`;
-  const descriptionLength = getRandomInteger(1, MAX_LENGTH_DESCRIPTION);
-  let descriptionNotes = ``;
+  const descriptionNote = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta
+   ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam
+    nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae,
+    sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.
+    Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus.
+    In rutrum ac purus sit amet tempus.`;
 
-  for (let y = 0; y < descriptionLength; y++) {
-    descriptionNotes += descriptionNote;
-  }
-  return descriptionNotes;
+  const descriptionNoteArray = descriptionNote.split(`. `);
+  const suffleDescriptionNoteArray = shuffle(descriptionNoteArray);
+  const newSuffleDescriptionNoteArray = suffleDescriptionNoteArray.slice(0, getRandomInteger(1, 5));
+  return newSuffleDescriptionNoteArray.join(`. `);
 };
 
 const generatePointType = () => {
@@ -23,7 +26,7 @@ const generatePointType = () => {
     `Bus`,
     `Train`,
     `Ship`,
-    `Transport`,
+    `Carshering`,
     `Drive`,
     `Flight`,
     `Check-in`,
@@ -34,7 +37,6 @@ const generatePointType = () => {
   const randomIndex = getRandomInteger(0, types.length - 1);
   return types[randomIndex];
 };
-generatePointType();
 
 const generateDestination = () => {
   const destinations = [
@@ -43,6 +45,11 @@ const generateDestination = () => {
     `Paris`,
     `Vancouver`,
     `Tokyo`,
+    `Helsinki`,
+    `Copenhagen`,
+    `Moscow`,
+    `Amsterdam`,
+    `Beijing`,
   ];
 
   const randomIndex = getRandomInteger(0, destinations.length - 1);
@@ -52,15 +59,21 @@ const generateDestination = () => {
 
 const generateOffers = (type) => {
 
+  const names = [
+    `UBER`,
+    `MacDonalds`,
+    `MTS`,
+    `Add lugguage`,
+    `Rent a car`,
+    `Lunch`,
+    `Museum`,
+  ];
   const getOffersName = () => {
-    const names = [
-      `UBER`,
-      `Macdonalds`,
-      `MTS`,
-    ];
 
     const randomIndex = getRandomInteger(0, names.length - 1);
-    return names[randomIndex];
+    const currentName = names[randomIndex];
+    names.splice(randomIndex, 1);
+    return currentName;
   };
 
 
@@ -86,26 +99,22 @@ const generatePhotos = () => {
   return photos;
 };
 
-const generateStartEndDate = (date) => {
-  if (date) {
-    const daysGap = getRandomInteger(100, 200);
-    return dayjs().add(daysGap, `day`).format(`DD/MM/YYYY hh:mm`);
-  }
-  const daysGap = getRandomInteger(1, 100);
+const generateDates = () => {
+  const gap = getRandomInteger(36000, 360000);
 
-  return dayjs().add(daysGap, `day`).format(`DD/MM/YYYY hh:mm`);
-};
+  const startDate = dayjs().toDate();
+  startDate.setSeconds(gap);
 
-const generateDate = () => {
-  return dayjs().format(`MMM D`).toUpperCase();
+  const endDate = dayjs().toDate();
+  endDate.setSeconds(gap + getRandomInteger(1000, 10000));
+
+  return [startDate, endDate];
 };
 
 export const generatePoint = () => {
 
   const pointType = generatePointType();
-  const startDate = generateStartEndDate();
-  const endDate = generateStartEndDate(startDate);
-  const date = generateDate();
+  const [startDate, endDate] = generateDates();
   return {
     type: pointType,
     destination: generateDestination(),
@@ -115,6 +124,5 @@ export const generatePoint = () => {
     cost: getRandomInteger(1, MAX_COST),
     startDate,
     endDate,
-    date,
   };
 };

@@ -1,10 +1,5 @@
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
+import {getRandomInteger} from "../utils.js";
+import {toFormat} from "../utils.js";
 
 export const createEventFormTemplate = (point) => {
   const {type, destination, offers, cost, startDate, endDate, description} = point;
@@ -29,6 +24,16 @@ export const createEventFormTemplate = (point) => {
   });
 
   const offersString = offersArray.join(``);
+
+
+  const photosQuantity = getRandomInteger(1, 5);
+  const photos = [];
+
+  for (let i = 0; i < photosQuantity; i++) {
+    photos.push(`<img class="event__photo" src="http://picsum.photos/248/152?r=${getRandomInteger(1, 100)}" alt="Event photo">`);
+  }
+  const photosString = photos.join(``);
+
 
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -111,10 +116,10 @@ export const createEventFormTemplate = (point) => {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate}">
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${toFormat(startDate, `DD/MM/YY hh:mm`)}">
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate}">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${toFormat(endDate, `DD/MM/YY hh:mm`)}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
@@ -143,6 +148,11 @@ export const createEventFormTemplate = (point) => {
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${description}</p>
+                     <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                          ${photosString}
+                      </div>
+                    </div>
                   </section>
                 </section>
               </form>
