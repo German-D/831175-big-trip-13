@@ -1,36 +1,80 @@
-export const creatEventPointTemplate = () => {
+import {toFormat} from "../utils.js";
+import {getRandomInteger} from "../utils.js";
+
+/**
+ *
+ * @param {object} point
+ * @param {Date} point.startDate
+ * @return {string}
+ */
+export const creatEventPointTemplate = (point) => {
+  const {type, destination, offers, cost, startDate, endDate} = point;
+
+  const offersArray = [];
+  offers.forEach(function (item) {
+    const {offersCost, offersName} = item;
+    offersArray.push(`<li class="event__offer">
+                    <span class="event__offer-title">${offersName}</span>
+                        &plus;&euro;&nbsp;
+                    <span class="event__offer-price">${offersCost}</span>
+                     </li>`);
+  });
+
+  const offersString = offersArray.join(``);
+
+  // eslint-disable-next-line valid-jsdoc
+  /**
+   *
+   * @param {Date} start
+   * @param {Date} end
+   */
+  const diffDate = (start, end) => {
+    const diff = Math.floor((end.getTime() - start.getTime()) / 60000);
+    const minutes = diff % 60;
+    const hours = Math.floor((diff / 60)) % 24;
+    const days = Math.floor(diff / (60 * 24));
+
+    const result = [];
+    if (days) {
+      result.push(days + `D`);
+    }
+    if (hours) {
+      result.push(hours + `H`);
+    }
+    if (minutes) {
+      result.push(minutes + `M`);
+    }
+
+    return result.join(` `);
+  };
+
+  const isFavoriteBool = getRandomInteger(0, 1);
+
+  const activeClass = (isFavoriteBool) ? `event__favorite-btn--active` : ` `;
+
   return `<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-19">MAR 19</time>
+                <time class="event__date" datetime="${toFormat(startDate, `YYYY-MM-DD`)}">${toFormat(startDate, `MMM D`)}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/sightseeing.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">Sightseeing Chamonix</h3>
+                <h3 class="event__title">${type} ${destination}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-19T11:20">14:20</time>
+                    <time class="event__start-time" datetime="${toFormat(startDate, `YYYY-MM-DDThh:mm`)}">${toFormat(startDate, `hh:mm`)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="2019-03-19T13:00">13:00</time>
+                    <time class="event__end-time" datetime="${toFormat(endDate, `YYYY-MM-DDThh:mm`)}">${toFormat(endDate, `hh:mm`)}</time>
                   </p>
-                  <p class="event__duration">1H 20M</p>
+                  <p class="event__duration">${diffDate(startDate, endDate)}</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;<span class="event__price-value">50</span>
+                  &euro;&nbsp;<span class="event__price-value">${cost}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  <li class="event__offer">
-                    <span class="event__offer-title">Book tickets</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">40</span>
-                  </li>
-                  <li class="event__offer">
-                    <span class="event__offer-title">Lunch in city</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">30</span>
-                  </li>
+                 ${offersString}
                 </ul>
-                <button class="event__favorite-btn" type="button">
+                <button class="event__favorite-btn ${activeClass}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                     <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
