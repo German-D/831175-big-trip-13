@@ -1,5 +1,7 @@
 import {toFormat} from "../utils.js";
 import {getRandomInteger} from "../utils.js";
+import {createElement} from "../utils.js";
+
 
 /**
  *
@@ -7,7 +9,7 @@ import {getRandomInteger} from "../utils.js";
  * @param {Date} point.startDate
  * @return {string}
  */
-export const creatEventPointTemplate = (point) => {
+const creatEventPointTemplate = (point) => {
   const {type, destination, offers, cost, startDate, endDate} = point;
 
   const offersArray = [];
@@ -86,3 +88,26 @@ export const creatEventPointTemplate = (point) => {
               </div>
             </li>`;
 };
+
+export default class EventPoint {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return creatEventPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
