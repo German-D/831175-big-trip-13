@@ -1,7 +1,8 @@
 import {getRandomInteger} from "../utils.js";
 import {toFormat} from "../utils.js";
+import {createElement} from "../utils.js";
 
-export const createEventFormTemplate = (point) => {
+const createEventFormTemplate = (point) => {
   const {type, destination, offers, cost, startDate, endDate, description} = point;
 
   const offersArray = [];
@@ -158,3 +159,26 @@ export const createEventFormTemplate = (point) => {
               </form>
             </li>`;
 };
+
+export default class EventForm {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventFormTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

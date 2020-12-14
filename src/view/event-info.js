@@ -1,6 +1,9 @@
 import {toFormat} from "../utils.js";
+import {createElement} from "../utils.js";
 
-export const createEventInfoTemplate = (tripinfo) => {
+// Функцию для генерации HTML-разметки можно превратить в метод класса,
+// однако делать мы этого не будем, чтобы не раздувать diff изменений
+const createEventInfoTemplate = (tripinfo) => {
   const {stops, cost, startDate, endDate} = tripinfo;
   const currentStops = (stops.length > 3) ? `${stops[0]} — ... — ${stops[stops.length - 1]}` : stops.join(` &mdash; `);
 
@@ -16,3 +19,26 @@ export const createEventInfoTemplate = (tripinfo) => {
             </p>
           </section>`;
 };
+
+export default class EventInfo {
+  constructor(fullTripInfo) {
+    this._fullTripInfo = fullTripInfo;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventInfoTemplate(this._fullTripInfo);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
