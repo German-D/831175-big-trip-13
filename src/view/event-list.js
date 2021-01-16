@@ -5,7 +5,7 @@ const creatEventList = () => {
           </ul>`;
 };
 
-export default class EventList extends AbstractView{
+export default class EventList extends AbstractView {
 
   getTemplate() {
     return creatEventList();
