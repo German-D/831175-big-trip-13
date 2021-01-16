@@ -7,10 +7,10 @@ import EventFormView from "./view/event-form.js";
 import EventPointView from "./view/event-point.js";
 import NoPointView from "./view/no-point.js";
 import {generatePoint} from "./mock/point.js";
-import {render, RenderPosition} from "./utils.js";
+import {render, RenderPosition, replace} from "./utils/render.js";
 import {generateFullTrip} from "./mock/fullTrip.js";
 
-const POINT_COUNT = 0;
+const POINT_COUNT = 20;
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const fullTripInfo = generateFullTrip(points);
@@ -19,21 +19,21 @@ const tripControls = document.querySelector(`.trip-controls`);
 
 const tripMain = document.querySelector(`.trip-main`);
 if (points.length !== 0) {
-  render(tripMain, new EventInfoView(fullTripInfo).getElement(), RenderPosition.AFTERBEGIN);
+  render(tripMain, new EventInfoView(fullTripInfo), RenderPosition.AFTERBEGIN);
 }
 
-render(tripControls, new MenuView().getElement(), RenderPosition.BEFOREEND);
-render(tripControls, new FiltersView().getElement(), RenderPosition.BEFOREEND);
+render(tripControls, new MenuView(), RenderPosition.BEFOREEND);
+render(tripControls, new FiltersView(), RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
 if (points.length !== 0) {
-  render(tripEvents, new SortView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEvents, new SortView(), RenderPosition.BEFOREEND);
 }
-render(tripEvents, new EventListView().getElement(), RenderPosition.BEFOREEND);
+render(tripEvents, new EventListView(), RenderPosition.BEFOREEND);
 
 const tripEventList = tripEvents.querySelector(`.trip-events__list`);
 if (points.length === 0) {
-  render(tripEventList, new NoPointView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventList, new NoPointView(), RenderPosition.BEFOREEND);
 }
 if (points.length !== 0) {
   const renderPoint = (pointListElement, point) => {
@@ -46,11 +46,11 @@ if (points.length !== 0) {
     };
 
     const replacePointToForm = () => {
-      pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+      replace(pointEditComponent, pointComponent);
     };
 
     const replaceFormToPoint = () => {
-      pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+      replace(pointComponent, pointEditComponent);
     };
 
     const onEscKeyDown = (evt) => {
@@ -67,17 +67,16 @@ if (points.length !== 0) {
     const eventRollupToFormClickHandler = () => {
       replacePointToForm();
       document.addEventListener(`keydown`, onEscKeyDown);
-      pointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, eventRollupToPointClickHandler);
+      pointEditComponent.setEditClickHandler(eventRollupToPointClickHandler);
     };
 
-    pointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, eventRollupToFormClickHandler);
+    pointComponent.setEditClickHandler(eventRollupToFormClickHandler);
 
-    pointEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
-      evt.preventDefault();
+    pointEditComponent.setFormSubmitHandler(() => {
       closeForm();
     });
 
-    render(pointListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+    render(pointListElement, pointComponent, RenderPosition.BEFOREEND);
   };
 
   points.forEach((point) => {

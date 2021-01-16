@@ -1,5 +1,5 @@
-import {toFormat} from "../utils.js";
-import {createElement} from "../utils.js";
+import {toFormat} from "../utils/common.js";
+import AbstractView from "./abstract.js";
 
 // Функцию для генерации HTML-разметки можно превратить в метод класса,
 // однако делать мы этого не будем, чтобы не раздувать diff изменений
@@ -20,25 +20,13 @@ const createEventInfoTemplate = (tripinfo) => {
           </section>`;
 };
 
-export default class EventInfo {
+export default class EventInfo extends AbstractView {
   constructor(fullTripInfo) {
+    super();
     this._fullTripInfo = fullTripInfo;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventInfoTemplate(this._fullTripInfo);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
