@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import {getRandomInteger} from "../utils.js";
-import {shuffle} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
+import {shuffle} from "../utils/common.js";
 
 const MAX_OFFERS_QUATITY = 5;
 const MAX_PHOTOS_QUATITY = 6;

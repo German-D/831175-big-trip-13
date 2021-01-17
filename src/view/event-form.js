@@ -1,6 +1,6 @@
-import {getRandomInteger} from "../utils.js";
-import {toFormat} from "../utils.js";
-import {createElement} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
+import {toFormat} from "../utils/common.js";
+import AbstractView from "./abstract.js";
 
 const createEventFormTemplate = (point) => {
   const {type, destination, offers, cost, startDate, endDate, description} = point;
@@ -160,25 +160,35 @@ const createEventFormTemplate = (point) => {
             </li>`;
 };
 
-export default class EventForm {
+export default class EventForm extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createEventFormTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
   }
 }
